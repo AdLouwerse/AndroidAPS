@@ -326,7 +326,8 @@ class DetermineBasalAdapterSMBDynamicISFJS(private val scriptReader: ScriptReade
             autosensData.put("ratio", 1.0)
 
         this.microBolusAllowed = microBolusAllowed
-        smbAlwaysAllowed = advancedFiltering
+        //smbAlwaysAllowed = advancedFiltering
+        smbAlwaysAllowed = true
         currentTime = now
         this.flatBGsDetected = flatBGsDetected
     }
