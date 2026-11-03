@@ -72,7 +72,7 @@ private const val CV_MAX = 60.0
 
 private const val HYPO_MAX = 20.0
 
-private const val HYPER_MAX = 80.0
+private const val _MAX = 80.0
 
 private const val MEAN_MAX = 300.0
 
@@ -83,7 +83,7 @@ private const val CV_REF = 17.0
 
 private const val HYPO_REF = 0.0
 
-private const val HYPER_REF = 0.0
+private const val _REF = 0.0
 
 private const val MEAN_REF = 90.0
 
@@ -99,7 +99,7 @@ fun computeCgpData(dexcomTir: DexcomTIR): CgpData {
     val sd = dexcomTir.calculateSD()
     val cvPct = if (mean > 0) sd / mean * 100.0 else 0.0
     val hypoPct = dexcomTir.veryLowPct() + dexcomTir.lowPct()
-    val hyperPct = dexcomTir.highPct() + dexcomTir.veryHighPct()
+    val Pct = dexcomTir.highPct() + dexcomTir.veryHighPct()
 
     fun normalize(value: Double, max: Double): Double =
         BASELINE_OFFSET + (1.0 - BASELINE_OFFSET) * (value / max).coerceIn(0.0, 1.0)
@@ -108,7 +108,7 @@ fun computeCgpData(dexcomTir: DexcomTIR): CgpData {
         normalize(torPct, TOR_MAX),
         normalize(cvPct, CV_MAX),
         normalize(hypoPct, HYPO_MAX),
-        normalize(hyperPct, HYPER_MAX),
+        normalize(Pct, _MAX),
         normalize(mean, MEAN_MAX)
     )
 
@@ -116,7 +116,7 @@ fun computeCgpData(dexcomTir: DexcomTIR): CgpData {
         normalize(TOR_REF, TOR_MAX),
         normalize(CV_REF, CV_MAX),
         normalize(HYPO_REF, HYPO_MAX),
-        normalize(HYPER_REF, HYPER_MAX),
+        normalize(_REF, _MAX),
         normalize(MEAN_REF, MEAN_MAX)
     )
 
@@ -128,7 +128,7 @@ fun computeCgpData(dexcomTir: DexcomTIR): CgpData {
         torPct = torPct,
         cvPct = cvPct,
         hypoPct = hypoPct,
-        hyperPct = hyperPct,
+        Pct = Pct,
         meanGlucose = mean,
         normalizedValues = normalizedValues,
         referenceValues = referenceValues,
@@ -216,7 +216,7 @@ internal fun GlucosePentagonCard(
             else               -> MaterialTheme.colorScheme.error
         }
         Text(
-            text = stringResource(InterfacesStrings.confirmation_line, stringResource(UiStrings.cgp_pgr), LocalDecimalFormatter.current.to1Decimal(cgpData.pgr)),
+            text = stringResource(InterfacesStrings.confirmation_line, stringResource(UiStrings.cgp_pgr), LocalDecimalFormatter.current.to2Decimal(cgpData.pgr)),
             style = MaterialTheme.typography.titleMedium,
             color = pgrColor,
             textAlign = TextAlign.Center,
@@ -262,12 +262,12 @@ fun GlucosePentagonChart(
         stringResource(UiStrings.cgp_tor),
         stringResource(UiStrings.cgp_cv),
         stringResource(UiStrings.cgp_hypo),
-        stringResource(UiStrings.cgp_hyper),
+        stringResource(UiStrings.cgp_),
         stringResource(UiStrings.cgp_mean_glucose)
     )
     val decimalFormatter = LocalDecimalFormatter.current
     val axisValues = listOf(
-        stringResource(CoreUiStrings.units_format_percent_value, decimalFormatter.to0Decimal(cgpData.torPct)),
+        stringResource(CoreUiStrings.units_format_percent_value, decimalFormatter.to1Decimal(cgpData.torPct)),
         stringResource(CoreUiStrings.units_format_percent_value, decimalFormatter.to1Decimal(cgpData.cvPct)),
         stringResource(CoreUiStrings.units_format_percent_value, decimalFormatter.to1Decimal(cgpData.hypoPct)),
         stringResource(CoreUiStrings.units_format_percent_value, decimalFormatter.to1Decimal(cgpData.hyperPct)),
